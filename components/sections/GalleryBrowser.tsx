@@ -220,6 +220,7 @@ function Lightbox({
 }) {
   const { list, index } = state;
   const current = list[index];
+  const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const lastFocused = useRef<HTMLElement | null>(null);
 
@@ -235,9 +236,33 @@ function Lightbox({
     document.body.style.overflow = "hidden";
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      else if (e.key === "ArrowRight") go(1);
-      else if (e.key === "ArrowLeft") go(-1);
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        go(1);
+        return;
+      }
+      if (e.key === "ArrowLeft") {
+        go(-1);
+        return;
+      }
+      // Trap focus within the dialog.
+      if (e.key === "Tab" && dialogRef.current) {
+        const focusable = dialogRef.current.querySelectorAll<HTMLElement>("button");
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const activeEl = document.activeElement;
+        if (e.shiftKey && activeEl === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && activeEl === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
 
@@ -252,6 +277,7 @@ function Lightbox({
 
   return (
     <div
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-label={current.alt}
