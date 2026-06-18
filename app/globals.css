@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Blue Mesa Pools & Spas — design tokens (Tailwind v4 @theme)
+   Palette pulled directly from the logo. One accent (pool blue);
+   gold is reserved for tiny "rising sun" brand accents only.
+   ============================================================ */
+@theme {
+  /* Brand */
+  --color-navy: #1b3a5f;
+  --color-navy-deep: #122a47;
+  --color-blue: #1a8fd1;
+  --color-blue-deep: #1577b0;
+  --color-wave: #4fb4e8;
+  --color-gold: #f5a623;
+  --color-ink: #1a2230;
+  --color-slate: #4a4a4a;
+  --color-mist: #f4f8fb;
+  --color-mist-deep: #e7f0f7;
+
+  /* Type */
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+
+  /* Motion — strong custom curves (per Emil's skill; built-in easings are too weak) */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-quint: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-blue) 22%, transparent);
+    color: var(--color-navy);
+  }
+
+  /* Brand-tinted focus ring — never pure black */
+  :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    color: var(--color-navy);
+    text-wrap: balance;
+  }
+}
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+
+/* Caustics / water sheen used behind dark brand sections. */
+.bg-water {
+  background-color: var(--color-navy);
+  background-image:
+    radial-gradient(120% 90% at 85% -10%, color-mix(in srgb, var(--color-wave) 38%, transparent), transparent 60%),
+    radial-gradient(90% 70% at 10% 110%, color-mix(in srgb, var(--color-blue) 30%, transparent), transparent 55%),
+    linear-gradient(180deg, var(--color-navy) 0%, var(--color-navy-deep) 100%);
+}
+
+/* Subtle hairline used to separate sections without heavy borders. */
+.rule-soft {
+  border-color: color-mix(in srgb, var(--color-navy) 10%, transparent);
+}
+
+/* ------------------------------------------------------------------
+   Motion — CSS-driven so content is ALWAYS visible by default.
+   Reveals never gate visibility on JS (no blank sections in crawlers,
+   headless renderers, or if JS fails). They enhance where supported.
+   ------------------------------------------------------------------ */
+
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-visual-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Scroll-driven reveal: scrubbed by the element's own viewport position.
+     Falls back to plain visible where view-timeline isn't supported. */
+  @supports (animation-timeline: view()) {
+    [data-reveal] {
+      animation: reveal-rise both linear;
+      animation-timeline: view();
+      animation-range: entry 2% cover 26%;
+    }
+  }
+
+  /* Hero load-in (above the fold) — plays on load, no scroll needed,
+     and runs without JS because it's pure CSS. */
+  .hero-rise {
+    opacity: 0;
+    animation: hero-rise 0.8s var(--ease-out-expo) forwards;
+    animation-delay: var(--rise-delay, 0ms);
+  }
+  .hero-visual-rise {
+    opacity: 0;
+    animation: hero-visual-rise 0.9s var(--ease-out-expo) 0.2s forwards;
+  }
+}
