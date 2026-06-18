@@ -55,7 +55,7 @@ Implement `GHLSink` against the `LeadSink` interface and change the one line in
 
 - **Domain:** brief says `bluemesapoolandspa.com`; the flyer footer says
   `bluemesapools.com`. Confirm which is registered. Set in `lib/site.ts`.
-- **Phone:** `+1 (915) 280-6263` — confirm it can receive both calls and texts.
+- **Phone:** `+1 (915) 229-1558` — confirm it can receive both calls and texts.
 - **Logo:** an SVG/vector of the wordmark would keep it crisp at all sizes
   (currently the supplied PNG is used in the header; a vector mesa mark is used
   for the favicon/footer/OG).

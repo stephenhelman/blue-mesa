@@ -14,7 +14,7 @@ friction.
 ## Product Purpose
 A mobile-first marketing site that makes Blue Mesa Pools & Spas feel like a
 premium local craftsman and captures leads. Two conversions, in priority order:
-(1) phone call / text to +1 (915) 280-6263; (2) free in-home consultation form
+(1) phone call / text to +1 (915) 229-1558; (2) free in-home consultation form
 submission (routes to Google Sheets now, GoHighLevel later via a swappable sink).
 Success = the site looks elite on a phone and reliably captures leads.
 
